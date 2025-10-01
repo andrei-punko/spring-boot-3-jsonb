@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:14.13-alpine
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: articlesdb
+      POSTGRES_USER: articles-user
+      POSTGRES_PASSWORD: articles-password
+
+  spring-boot-jsonb-app:
+    image: spring-boot-jsonb-app
+    restart: always
+    ports:
+      - "9080:9080"
+    depends_on:
+      - postgres
+    environment:
+      DB_URL: 'jdbc:postgresql://postgres:5432/articlesdb'
+      DB_USER: articles-user
+      DB_PASSWORD: articles-password
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9080/health"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres-data:
