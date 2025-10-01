@@ -1,25 +1,24 @@
 package by.andd3dfx.templateapp.persistence.entities;
 
-import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import com.vladmihalcea.hibernate.type.json.JsonStringType;
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
+import org.hibernate.type.SqlTypes;
+
+import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
@@ -27,10 +26,6 @@ import org.hibernate.annotations.TypeDefs;
 @Data
 @Entity
 @Table(name = "articles")
-@TypeDefs({
-        @TypeDef(name = "json", typeClass = JsonStringType.class),
-        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-})
 public class Article {
 
     @Id
@@ -54,7 +49,8 @@ public class Article {
     @Column
     private String author;
 
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Location location;
 

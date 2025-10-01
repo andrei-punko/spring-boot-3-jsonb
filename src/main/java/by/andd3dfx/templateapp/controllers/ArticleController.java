@@ -3,16 +3,14 @@ package by.andd3dfx.templateapp.controllers;
 import by.andd3dfx.templateapp.dto.ArticleDto;
 import by.andd3dfx.templateapp.dto.ArticleUpdateDto;
 import by.andd3dfx.templateapp.services.IArticleService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import java.util.List;
-import javax.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.annotations.ParameterObject;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
@@ -30,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/articles")
@@ -37,24 +37,25 @@ public class ArticleController {
 
     private final IArticleService articleService;
 
-    @ApiOperation(value = "Create new article", response = ArticleDto.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "Article successfully created"),
+    @Operation(summary = "Create new article", responses = {
+            @ApiResponse(
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArticleDto.class)),
+                    responseCode = "201", description = "Article successfully created"
+            )
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ArticleDto createArticle(
-        @ApiParam("New article's data")
-        @Validated
-        @RequestBody ArticleDto newArticleDto
+            @Parameter(description = "New article's data")
+            @Validated
+            @RequestBody ArticleDto newArticleDto
     ) {
         return articleService.create(newArticleDto);
     }
 
-    @ApiOperation(value = "Get articles by location", response = List.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Articles successfully retrieved"),
-            @ApiResponse(code = 404, message = "Articles not found"),
+    @Operation(summary = "Get articles by location", responses = {
+            @ApiResponse(responseCode = "200", description = "Articles successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "Articles not found"),
     })
     @GetMapping
     public List<ArticleDto> getArticlesByLocation(
@@ -63,69 +64,71 @@ public class ArticleController {
         return articleService.getArticleByLocation(country, city);
     }
 
-    @ApiOperation(value = "Get article by id", response = ArticleDto.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Article successfully retrieved"),
-        @ApiResponse(code = 404, message = "Article not found"),
+    @Operation(summary = "Get existing article by id", responses = {
+            @ApiResponse(
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArticleDto.class)),
+                    responseCode = "200", description = "Article successfully retrieved"
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "Article not found"
+            ),
     })
     @GetMapping("/{id}")
     public ArticleDto readArticle(
-        @ApiParam("Article's id")
-        @NotNull
-        @PathVariable Long id
+            @Parameter(description = "Article's id")
+            @NotNull
+            @PathVariable("id") Long id
     ) {
         return articleService.get(id);
     }
 
-    @ApiOperation("Update article")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Article successfully updated"),
-        @ApiResponse(code = 404, message = "Article not found"),
+    @Operation(summary = "Update article", responses = {
+            @ApiResponse(
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArticleDto.class)),
+                    responseCode = "200", description = "Article successfully updated"
+            ),
+            @ApiResponse(
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArticleDto.class)),
+                    responseCode = "404", description = "Article not found"
+            ),
     })
     @PatchMapping("/{id}")
-    public void updateArticle(
-        @ApiParam("Article's id")
-        @NotNull
-        @PathVariable Long id,
-        @ApiParam("Updated fields of article")
-        @Validated
-        @RequestBody ArticleUpdateDto articleUpdateDto
+    public ArticleDto updateArticle(
+            @Parameter(description = "Article's id")
+            @NotNull
+            @PathVariable("id") Long id,
+            @Parameter(description = "Updated fields of article")
+            @Validated
+            @RequestBody ArticleUpdateDto articleUpdateDto
     ) {
-        articleService.update(id, articleUpdateDto);
+        return articleService.update(id, articleUpdateDto);
     }
 
-    @ApiOperation("Delete article by id")
-    @ApiResponses(value = {
-        @ApiResponse(code = 204, message = "Article successfully deleted"),
-        @ApiResponse(code = 404, message = "Article not found"),
+    @Operation(summary = "Delete article by id", responses = {
+            @ApiResponse(
+                    responseCode = "204", description = "Article successfully deleted"
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "Article not found"
+            ),
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteArticle(
-        @ApiParam("Article's id")
-        @NotNull
-        @PathVariable Long id
+            @Parameter(description = "Article's id")
+            @NotNull
+            @PathVariable("id") Long id
     ) {
         articleService.delete(id);
     }
 
-    @ApiOperation(value = "Read articles paged", response = Slice.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Articles successfully retrieved"),
+    @Operation(summary = "Read articles paged", responses = {
+            @ApiResponse(
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Slice.class)),
+                    responseCode = "200", description = "Articles successfully retrieved"
+            ),
     })
     @GetMapping("/all")
-    // Workaround for Swagger bug, according to https://github.com/springfox/springfox/issues/2623#issuecomment-414297583
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
-            value = "Results page you want to retrieve (0..N)", defaultValue = "0"),
-        @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
-            value = "Number of records per page.", defaultValue = "50"),
-        @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
-            value = "Sorting criteria in the format: property,asc(|desc). " +
-                "Default sort order is ascending. " +
-                "Multiple sort criteria are supported.",
-            defaultValue = "title,ASC")
-    })
     public Slice<ArticleDto> readArticlesPaged(
             @ParameterObject
             @PageableDefault(size = 50)
