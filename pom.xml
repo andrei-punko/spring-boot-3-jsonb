@@ -18,8 +18,10 @@
 		<spring-boot.version>3.2.2</spring-boot.version>
 		<mapstruct.version>1.6.0</mapstruct.version>
 		<lombok.version>1.18.34</lombok.version>
-		<springdoc.version>1.7.0</springdoc.version>
-		<swagger.version>1.6.12</swagger.version>
+
+		<swagger-core.version>2.2.20</swagger-core.version>
+		<springdoc.version>2.3.0</springdoc.version>
+
 		<testcontainers.version>1.20.1</testcontainers.version>
 	</properties>
 
@@ -84,13 +86,18 @@
 		<!-- Swagger -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${springdoc.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.swagger</groupId>
+			<groupId>io.swagger.core.v3</groupId>
 			<artifactId>swagger-annotations</artifactId>
-			<version>${swagger.version}</version>
+			<version>${swagger-core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-models</artifactId>
+			<version>${swagger-core.version}</version>
 		</dependency>
 
 		<!-- DB -->
