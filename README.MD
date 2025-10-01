@@ -1,4 +1,4 @@
-# Spring Boot app with example of Postgres JSONB data type usage
+# Spring Boot 3 app with Postgres JSONB data type usage
 
 ![Java CI with Maven](https://github.com/andrei-punko/spring-boot-3-jsonb/workflows/Java%20CI%20with%20Maven/badge.svg)
 [![Coverage](.github/badges/jacoco.svg)](https://github.com/andrei-punko/spring-boot-3-jsonb/actions/workflows/maven.yml)
@@ -89,7 +89,6 @@ curl -i -X DELETE http://localhost:9080/articles/1
 
 Check functional test report [here](func-test/build/spock-reports/index.html)
 
-## Video with description of the project
+## Related project
 
-[//]: # ([YouTube link]&#40;https://youtu.be/AzvJe9ij53o&#41;)
-[![YouTube link](https://markdown-videos-api.jorgenkh.no/url?url=https%3A%2F%2Fyoutu.be%2FAzvJe9ij53o)](https://youtu.be/AzvJe9ij53o)
+Same project but with usage of Spring Boot 2 available [here](https://github.com/andrei-punko/spring-boot-2-jsonb)
