@@ -111,13 +111,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- JSONB types -->
-    <dependency>
-			<groupId>io.hypersistence</groupId>
-			<artifactId>hypersistence-utils-hibernate-60</artifactId>
-			<version>3.9.0</version>
-    </dependency>
-
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
