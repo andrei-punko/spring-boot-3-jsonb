@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static by.andd3dfx.templateapp.persistence.dao.ArticleRepositoryCustomImplTest.buildArticle;
+import static by.andd3dfx.templateapp.persistence.dao.ArticleRepositoryTest.buildArticle;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
